@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điền khuyết Công nghệ 9 - 96 câu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px;
+            background: #f5f5f5;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stats {
+            background: #8e44ad;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .mode-switch {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .mode-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .mode-btn:not(.active) {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .quiz-area {
+            padding: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .q-num {
+            background: #8e44ad;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            border-left: 5px solid #8e44ad;
+        }
+
+        .blank-highlight {
+            background: #fff3cd;
+            color: #856404;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 5px;
+            border: 1px dashed #ffc107;
+        }
+
+        .answer-input-area {
+            margin-bottom: 30px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 18px;
+            border: 2px solid #8e44ad;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .answer-input:focus {
+            border-color: #5e3370;
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.2);
+        }
+
+        .answer-input.correct-answer {
+            border-color: #27ae60;
+            background-color: #f0fff4;
+        }
+
+        .answer-input.wrong-answer {
+            border-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+
+        .feedback {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-prev, .btn-next {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .btn-prev:hover:not(:disabled), .btn-next:hover:not(:disabled) {
+            background: #733d8a;
+            transform: scale(1.05);
+        }
+
+        .btn-prev:disabled, .btn-next:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .btn-submit {
+            background: #27ae60;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #1e8449;
+            transform: scale(1.02);
+        }
+
+        .btn-check {
+            background: #f39c12;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .btn-check:hover {
+            background: #e67e22;
+        }
+
+        .result-area {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            border: 2px solid #8e44ad;
+            display: none;
+        }
+
+        .result-area.show {
+            display: block;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .result-item {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .result-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #8e44ad;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .legend-color.correct-border { border: 2px solid #27ae60; background: #f0fff4; }
+        .legend-color.wrong-border { border: 2px solid #e74c3c; background: #fff5f5; }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .stats {
+                margin-left: 0;
+                text-align: center;
+            }
+            .mode-switch {
+                margin-left: 0;
+                justify-content: center;
+            }
+            .question-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 ĐIỀN KHUYẾT CÔNG NGHỆ 9</h1>
+            <p>96 câu hỏi điền từ thích hợp vào chỗ trống</p>
+        </div>
+
+        <div class="controls">
+            <div class="mode-switch">
+                <button class="mode-btn active" id="modeTest">✏️ Làm bài</button>
+                <button class="mode-btn" id="modeReview">🔍 Xem đáp án</button>
+            </div>
+            <div class="stats" id="statsDisplay">Câu 1/96</div>
+        </div>
+
+        <div class="quiz-area">
+            <div class="legend" id="legend" style="display: none;">
+                <div class="legend-item">
+                    <div class="legend-color correct-border"></div>
+                    <span>Bạn trả lời đúng</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color wrong-border"></div>
+                    <span>Bạn trả lời sai</span>
+                </div>
+            </div>
+
+            <div class="question-header">
+                <span class="q-num" id="qNumLabel">Câu 1</span>
+                <span class="progress" id="progressDisplay">1/96</span>
+            </div>
+
+            <div class="question-text" id="questionText">Đang tải câu hỏi...</div>
+
+            <div class="answer-input-area">
+                <input type="text" class="answer-input" id="answerInput" placeholder="Nhập đáp án của bạn..." autocomplete="off">
+                <div class="feedback" id="feedback"></div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-prev" id="prevBtn" disabled>⬅ Câu trước</button>
+                <button class="btn-next" id="nextBtn">Câu sau ➔</button>
+            </div>
+
+            <button class="btn-submit" id="submitBtn">📝 Nộp bài</button>
+            <button class="btn-check" id="checkBtn" style="display: none;">🔍 Kiểm tra câu này</button>
+
+            <div class="result-area" id="resultArea">
+                <h3>KẾT QUẢ</h3>
+                <div class="result-stats">
+                    <div class="result-item">
+                        <div class="result-number" id="correctCount">0</div>
+                        <div class="result-label">Đúng</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-number" id="wrongCount">0</div>
+                        <div class="result-label">Sai</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-number" id="scorePercent">0%</div>
+                        <div class="result-label">Tỉ lệ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            ⚡ Nhập đáp án vào ô trống - Hệ thống tự động chấm điểm
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // DỮ LIỆU 96 CÂU HỎI ĐIỀN KHUYẾT
+        // =============================================
+        const fillBlankData = [
+            { id: 1, text: "Một trong những đặc điểm về môi trường làm việc của ngành nghề kĩ thuật, công nghệ là ............, hiện đại và luôn biến đổi.", answer: "năng động" },
+            { id: 2, text: "Mục đích chính của việc \"phân luồng trong giáo dục\" là tạo điều kiện để người học lựa chọn ............ với năng lực, cá nhân và nhu cầu xã hội.", answer: "hướng đi phù hợp" },
+            { id: 3, text: "Hệ thống giáo dục quốc dân Việt Nam được chia thành hai nhánh chính là giáo dục chính quy và giáo dục ............", answer: "thường xuyên" },
+            { id: 4, text: "Để đạt được trình độ cao nhất trong hệ thống giáo dục quốc dân (Tiến sĩ), một người tốt nghiệp đại học định hướng nghiên cứu thường phải trải qua thêm trình độ đào tạo ............", answer: "thạc sĩ" },
+            { id: 5, text: "Những người bị bệnh ............ hoặc nhiễm xạ cơ thể thường thuộc nhóm \"chống chỉ định y học\" đối với các ngành nghề kĩ thuật, công nghệ.", answer: "bệnh phổi, hen phế quản" },
+            { id: 6, text: "Giáo dục thường xuyên có ý nghĩa quan trọng trong hệ thống giáo dục quốc dân vì nó cho phép ............ có thể học tập, chuyển đổi ngành nghề phù hợp.", answer: "mọi người ở các lứa tuổi" },
+            { id: 7, text: "Theo Luật Giáo dục 2019, cấp học ............ là cấp học bắt buộc trong hệ thống giáo dục quốc dân Việt Nam?", answer: "tiểu học" },
+            { id: 8, text: "Bạn Bình đang học lớp 9 và muốn theo đuổi nghề sửa chữa ô tô để sớm đi làm giúp đỡ gia đình. Theo cấu trúc phân luồng, sau khi tốt nghiệp lớp 9, Bình nên nộp hồ sơ vào loại hình cơ sở giáo dục ............ để đào tạo trình độ trung cấp nghề.", answer: "trường trung cấp" },
+            { id: 9, text: "Ngành nghề kĩ thuật, công nghệ thường yêu cầu người lao động phải có kĩ năng chuyên môn và ............", answer: "tác phong công nghiệp" },
+            { id: 10, text: "Yếu tố sở thích, ............ thuộc về đặc điểm cá nhân khi chọn nghề.", answer: "năng lực" },
+            { id: 11, text: "Trong hệ thống giáo dục nghề nghiệp ở Việt Nam hiện nay có các trình độ: sơ cấp, trung cấp và ............", answer: "cao đẳng" },
+            { id: 12, text: "Sau khi tốt nghiệp trình độ cao đẳng, người học có thể tiếp tục học ............ để nâng cao trình độ chuyên môn.", answer: "liên thông lên đại học" },
+            { id: 13, text: "Đặc điểm môi trường làm việc ngành công nghệ là ............", answer: "luôn đổi mới, hiện đại" },
+            { id: 14, text: "Nếu chọn nghề không đúng năng lực sẽ ............", answer: "gặp nhiều khó khăn" },
+            { id: 15, text: "Cơ hội việc làm và nhu cầu của ............", answer: "thị trường lao động" },
+            { id: 16, text: "Khả năng phát triển và thăng tiến trong ............", answer: "nghề nghiệp" },
+            { id: 17, text: "Một trong những yêu cầu quan trọng của nghề thuộc lĩnh vực kĩ thuật là ............ và đảm bảo an toàn lao động.", answer: "tuân thủ quy trình" },
+            { id: 18, text: "Mục đích của phân luồng sau THCS là tạo cơ hội ............ phù hợp với năng lực và điều kiện.", answer: "học tập" },
+            { id: 19, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần tìm hiểu đầy đủ thông tin về ............", answer: "nghề nghiệp" },
+            { id: 20, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần lập kế hoạch học tập và ............ phù hợp.", answer: "rèn luyện" },
+            { id: 21, text: "Đặc điểm nổi bật của ngành nghề công nghệ hiện nay là đổi mới nhanh và ............", answer: "ứng dụng khoa học hiện đại" },
+            { id: 22, text: "Yếu tố sức khỏe khi chọn nghề giúp đảm bảo khả năng ............ công việc.", answer: "đáp ứng yêu cầu" },
+            { id: 23, text: "Trong hệ thống giáo dục nghề nghiệp ở Việt Nam hiện nay có các trình độ: sơ cấp, trung cấp và ............", answer: "cao đẳng" },
+            { id: 24, text: "Sau khi tốt nghiệp trình độ cao đẳng, người học có thể tiếp tục học ............ để nâng cao trình độ chuyên môn.", answer: "liên thông lên đại học" },
+            { id: 25, text: "Bạn An vừa tốt nghiệp Trung học cơ sở và có nguyện vọng trở thành một Kĩ sư điện tử trong tương lai. Lộ trình Học tiếp ............ sau đó thi tuyển vào trình độ Đại học chuyên ngành kĩ thuật điện tử là tối ưu nhất để An đạt được mục tiêu.", answer: "trung học phổ thông" },
+            { id: 26, text: "Mục đích chính của việc \"phân luồng trong giáo dục\" là ............ để người học lựa chọn hướng đi phù hợp với năng lực, cá nhân và nhu cầu xã hội.", answer: "tạo điều kiện" },
+            { id: 27, text: "Hệ thống giáo dục quốc dân Việt Nam được chia thành hai nhánh chính là giáo dục chính quy và giáo dục ............", answer: "thường xuyên" },
+            { id: 28, text: "Để đạt được trình độ cao nhất trong hệ thống giáo dục quốc dân (Tiến sĩ), một người tốt nghiệp đại học định hướng nghiên cứu thường phải trải qua thêm trình độ đào tạo ............", answer: "thạc sĩ" },
+            { id: 29, text: "Giáo dục phổ thông tại Việt Nam bao gồm những cấp học: Giáo dục tiểu học, trung học cơ sở và ............", answer: "trung học phổ thông" },
+            { id: 30, text: "Môi trường làm việc trong lĩnh vực kĩ thuật, công nghệ thường có \"áp lực công việc lớn\" Vì tính chất công việc luôn biến đổi, ............ và đòi hỏi tiếp xúc liên tục với công nghệ hiện đại.", answer: "đầy thử thách" },
+            { id: 31, text: "Theo Luật Giáo dục 2019, cấp học ............ là cấp học bắt buộc trong hệ thống giáo dục quốc dân Việt Nam?", answer: "tiểu học" },
+            { id: 32, text: "Bạn Bình đang học lớp 9 và muốn theo đuổi nghề sửa chữa ô tô để sớm đi làm giúp đỡ gia đình. Theo cấu trúc phân luồng, sau khi tốt nghiệp lớp 9, Bình nên nộp hồ sơ vào loại hình cơ sở giáo dục ............ để đào tạo trình độ trung cấp nghề.", answer: "trường trung cấp" },
+            { id: 33, text: "Ngành nghề kĩ thuật, công nghệ thường yêu cầu người lao động phải có: Kĩ năng chuyên môn và ............", answer: "tác phong công nghiệp" },
+            { id: 34, text: "Nghề nghiệp có vai trò giúp đảm bảo cuộc sống và ............ bản thân đối với mỗi cá nhân.", answer: "phát triển" },
+            { id: 35, text: "Trong hệ thống giáo dục nghề nghiệp ở Việt Nam hiện nay có các trình độ: sơ cấp, trung cấp và ............", answer: "cao đẳng" },
+            { id: 36, text: "Sau khi tốt nghiệp trình độ cao đẳng, người học có thể tiếp tục học ............ để nâng cao trình độ chuyên môn.", answer: "liên thông lên đại học" },
+            { id: 37, text: "Học sinh tốt nghiệp THPT có thể vào ............, cao đẳng, đại học.", answer: "trung cấp" },
+            { id: 38, text: "Trình độ sơ cấp có thời gian đào tạo từ ............ đến dưới 1 năm.", answer: "3 tháng" },
+            { id: 39, text: "Cơ hội việc làm và nhu cầu của ............", answer: "thị trường lao động" },
+            { id: 40, text: "Khả năng phát triển và thăng tiến trong ............", answer: "nghề nghiệp" },
+            { id: 41, text: "Nghề nghiệp khác với việc làm tạm thời ở điểm có tính ổn định và ............", answer: "gắn bó lâu dài" },
+            { id: 42, text: "Thời gian đào tạo trung cấp thường kéo dài từ 1 -- ............ (đối với người có bằng THPT có thể ngắn hơn).", answer: "2 năm" },
+            { id: 43, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần tìm hiểu đầy đủ thông tin về ............", answer: "nghề nghiệp" },
+            { id: 44, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần lập kế hoạch học tập và ............ phù hợp.", answer: "rèn luyện" },
+            { id: 45, text: "Yếu tố sức khỏe khi chọn nghề là vì giúp đảm bảo khả năng ............ công việc.", answer: "đáp ứng yêu cầu" },
+            { id: 46, text: "Nghề lập trình viên yêu cầu khả năng ............", answer: "tư duy logic" },
+            { id: 47, text: "Giáo dục nghề nghiệp ở Việt Nam có vai trò đáp ứng nhu cầu phát triển của ............", answer: "nền kinh tế" },
+            { id: 48, text: "Giáo dục nghề nghiệp ở Việt Nam có vai trò tạo cơ hội học tập và ............ cho người học.", answer: "việc làm" },
+            { id: 49, text: "Môi trường làm việc ngành kĩ thuật, công nghệ được định hình bởi ba yếu tố: năng động trong phong cách, hiện đại trong công cụ và ............", answer: "biến đổi trong xu hướng" },
+            { id: 50, text: "Mục đích chính của việc \"phân luồng trong giáo dục\" là ............ để người học lựa chọn hướng đi phù hợp với năng lực, cá nhân và nhu cầu xã hội.", answer: "tạo điều kiện" },
+            { id: 51, text: "Hệ thống giáo dục quốc dân Việt Nam được chia thành hai nhánh chính là giáo dục chính quy và giáo dục ............", answer: "thường xuyên" },
+            { id: 52, text: "Để đạt được trình độ cao nhất trong hệ thống giáo dục quốc dân (Tiến sĩ), một người tốt nghiệp đại học định hướng nghiên cứu thường phải trải qua thêm trình độ đào tạo ............", answer: "thạc sĩ" },
+            { id: 53, text: "Không gian làm việc trong lĩnh vực kĩ thuật, công nghệ luôn sôi nổi, được trang bị thiết bị tiên tiến và ............", answer: "thay đổi từng ngày" },
+            { id: 54, text: "Sau khi tốt nghiệp Trung học cơ sở, nếu một học sinh muốn vừa hoàn thành chương trình THPT vừa có nghề nghiệp ngay, hướng đi ............ (kết hợp học văn hóa THPT và học nghề hệ trung cấp) là phù hợp nhất.", answer: "theo học mô hình đào tạo 9+" },
+            { id: 55, text: "Theo Luật Giáo dục 2019, cấp học ............ là cấp học bắt buộc trong hệ thống giáo dục quốc dân Việt Nam?", answer: "tiểu học" },
+            { id: 56, text: "Bạn Bình đang học lớp 9 và muốn theo đuổi nghề sửa chữa ô tô để sớm đi làm giúp đỡ gia đình. Theo cấu trúc phân luồng, sau khi tốt nghiệp lớp 9, Bình nên nộp hồ sơ vào loại hình cơ sở giáo dục ............ để đào tạo trình độ trung cấp nghề.", answer: "trường trung cấp" },
+            { id: 57, text: "Người lao động trong ngành kĩ thuật, công nghệ được làm việc trong môi trường tràn đầy năng lượng sáng tạo, hiện đại bậc nhất và ............ theo xu hướng thời đại.", answer: "không ngừng chuyển mình" },
+            { id: 58, text: "Yếu tố ............ thuộc về đặc điểm cá nhân khi chọn nghề.", answer: "sở thích, năng lực" },
+            { id: 59, text: "Trong hệ thống giáo dục nghề nghiệp ở Việt Nam hiện nay có các trình độ: sơ cấp, trung cấp và ............", answer: "cao đẳng" },
+            { id: 60, text: "Sau khi tốt nghiệp trình độ cao đẳng, người học có thể tiếp tục học ............ để nâng cao trình độ chuyên môn.", answer: "liên thông lên đại học" },
+            { id: 61, text: "Nghề đó yêu cầu những kiến thức và kĩ năng ............", answer: "chuyên môn" },
+            { id: 62, text: "Nghề kĩ sư phần mềm thuộc lĩnh vực ............", answer: "công nghệ thông tin" },
+            { id: 63, text: "Khi tìm hiểu nghề nghiệp, học sinh cần xem xét các yếu tố cơ hội việc làm và nhu cầu của ............", answer: "thị trường lao động" },
+            { id: 64, text: "Khi tìm hiểu nghề nghiệp, học sinh cần xem xét các yếu tố khả năng phát triển và thăng tiến trong ............", answer: "nghề nghiệp" },
+            { id: 65, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần hiểu rõ sở thích và ............ của bản thân.", answer: "năng lực" },
+            { id: 66, text: "Cần đảm bảo an toàn lao động để bảo vệ sức khỏe và ............ người lao động.", answer: "tính mạng" },
+            { id: 67, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần tìm hiểu đầy đủ thông tin về ............", answer: "nghề nghiệp" },
+            { id: 68, text: "Để lựa chọn nghề nghiệp đúng đắn, mỗi cá nhân cần lập kế hoạch học tập và ............ phù hợp.", answer: "rèn luyện" },
+            { id: 69, text: "Nếu thông tin về nghề chưa đầy đủ, học sinh nên tìm hiểu thêm từ nhiều ............", answer: "nguồn tin cậy" },
+            { id: 70, text: "Yếu tố sức khỏe khi chọn nghề là vì giúp đảm bảo khả năng ............ yêu cầu công việc.", answer: "đáp ứng" },
+            { id: 71, text: "Giáo dục nghề nghiệp ở Việt Nam có vai trò đáp ứng nhu cầu phát triển của ............", answer: "nền kinh tế" },
+            { id: 72, text: "Giáo dục nghề nghiệp ở Việt Nam có vai trò tạo cơ hội học tập và ............ cho người học.", answer: "việc làm" },
+            { id: 73, text: "Theo nội dung bài học, \"nghề nghiệp\" được hiểu là tập hợp các công việc được ............, có tính chất ổn định và gắn bó lâu dài.", answer: "xã hội công nhận" },
+            { id: 74, text: "Bạn An vừa tốt nghiệp Trung học cơ sở và có nguyện vọng trở thành một Kĩ sư điện tử trong tương lai. Lộ trình học tiếp ............, sau đó thi tuyển vào trình độ Đại học chuyên ngành kĩ thuật điện tử là tối ưu nhất để An đạt được mục tiêu.", answer: "trung học phổ thông" },
+            { id: 75, text: "Hệ thống giáo dục quốc dân Việt Nam được chia thành hai nhánh chính là giáo dục chính quy và giáo dục ............", answer: "thường xuyên" },
+            { id: 76, text: "Để đạt được trình độ cao nhất trong hệ thống giáo dục quốc dân (Tiến sĩ), một người tốt nghiệp đại học định hướng nghiên cứu thường phải trải qua thêm trình độ đào tạo ............", answer: "thạc sĩ" },
+            { id: 77, text: "Giáo dục phổ thông tại Việt Nam bao gồm những cấp học giáo dục tiểu học, trung học cơ sở và ............", answer: "trung học phổ thông" },
+            { id: 78, text: "Khi tìm hiểu về bản thân để chọn nghề, yếu tố có khả năng ............ hoặc khéo tay bẩm sinh đây thuộc về \"năng khiếu\".", answer: "tính toán nhanh" },
+            { id: 79, text: "Theo Luật Giáo dục 2019, cấp học ............ là cấp học bắt buộc trong hệ thống giáo dục quốc dân Việt Nam?", answer: "tiểu học" },
+            { id: 80, text: "Bạn Bình đang học lớp 9 và muốn theo đuổi nghề sửa chữa ô tô để sớm đi làm giúp đỡ gia đình. Theo cấu trúc phân luồng, sau khi tốt nghiệp lớp 9, Bình nên nộp hồ sơ vào loại hình cơ sở giáo dục ............ để đào tạo trình độ trung cấp nghề.", answer: "trường trung cấp" },
+            { id: 81, text: "Chọn nghề không phù hợp có thể dẫn đến ............, hiệu quả thấp.", answer: "mất hứng thú" },
+            { id: 82, text: "Giáo dục nghề nghiệp bao gồm các trình độ sơ cấp, trung cấp, ............", answer: "cao đẳng" },
+            { id: 83, text: "Trong hệ thống giáo dục nghề nghiệp ở Việt Nam hiện nay có các trình độ: sơ cấp, trung cấp và ............", answer: "cao đẳng" },
+            { id: 84, text: "Sau khi tốt nghiệp trình độ cao đẳng, người học có thể tiếp tục học ............ để nâng cao trình độ chuyên môn.", answer: "liên thông lên đại học" },
+            { id: 85, text: "Học sinh tốt nghiệp THPT có thể vào ............, cao đẳng, đại học.", answer: "trung cấp" },
+            { id: 86, text: "Trình độ sơ cấp có thời gian đào tạo 3 tháng đến ............", answer: "dưới 1 năm" },
+            { id: 87, text: "Cơ hội việc làm và nhu cầu của ............", answer: "thị trường lao động" },
+            { id: 88, text: "Khả năng phát triển và thăng tiến trong ............", answer: "nghề nghiệp" },
+            { id: 89, text: "Chọn nghề phù hợp sẽ giúp phát huy ............ và tạo động lực làm việc.", answer: "năng lực" },
+            { id: 90, text: "Nghề điều dưỡng thuộc lĩnh vực ............", answer: "y tế" },
+            { id: 91, text: "Tìm hiểu đầy đủ thông tin về ............", answer: "nghề nghiệp" },
+            { id: 92, text: "Lập kế hoạch học tập và ............ phù hợp.", answer: "rèn luyện" },
+            { id: 93, text: "Sau khi đã quyết định nghề nghiệp, cần lập kế hoạch ............", answer: "học tập, rèn luyện" },
+            { id: 94, text: "Khi tìm hiểu nghề, cần chú ý đến ............ và yêu cầu nghề.", answer: "điều kiện làm việc" },
+            { id: 95, text: "Đáp ứng nhu cầu phát triển của ............", answer: "nền kinh tế" },
+            { id: 96, text: "Tạo cơ hội học tập và ............ cho người học.", answer: "việc làm" }
+        ];
+
+        // =============================================
+        // LOGIC XỬ LÝ
+        // =============================================
+        let currentIndex = 0;
+        let userAnswers = new Array(fillBlankData.length).fill('');
+        let isSubmitted = false;
+        let isReviewMode = false;
+        let checkedQuestions = new Array(fillBlankData.length).fill(false);
+
+        // DOM elements
+        const statsDisplay = document.getElementById('statsDisplay');
+        const qNumLabel = document.getElementById('qNumLabel');
+        const progressDisplay = document.getElementById('progressDisplay');
+        const questionText = document.getElementById('questionText');
+        const answerInput = document.getElementById('answerInput');
+        const feedback = document.getElementById('feedback');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        const resultArea = document.getElementById('resultArea');
+        const correctCount = document.getElementById('correctCount');
+        const wrongCount = document.getElementById('wrongCount');
+        const scorePercent = document.getElementById('scorePercent');
+        const modeTest = document.getElementById('modeTest');
+        const modeReview = document.getElementById('modeReview');
+        const legend = document.getElementById('legend');
+
+        // Render câu hỏi hiện tại
+        function renderQuestion() {
+            const q = fillBlankData[currentIndex];
+            
+            // Highlight phần chỗ trống
+            let displayText = q.text;
+            displayText = displayText.replace(/\.\.\.+/g, '<span class="blank-highlight">............</span>');
+            
+            qNumLabel.textContent = `Câu ${q.id}`;
+            progressDisplay.textContent = `${currentIndex + 1}/${fillBlankData.length}`;
+            questionText.innerHTML = displayText;
+            
+            // Hiển thị đáp án đã lưu
+            answerInput.value = userAnswers[currentIndex] || '';
+            
+            // Xóa feedback cũ
+            feedback.className = 'feedback';
+            feedback.style.display = 'none';
+            
+            // Xóa class của input
+            answerInput.classList.remove('correct-answer', 'wrong-answer');
+            
+            // Nếu đã kiểm tra câu này, hiển thị kết quả
+            if (checkedQuestions[currentIndex]) {
+                checkCurrentAnswer();
+            }
+            
+            // Nếu đang ở chế độ xem đáp án, hiển thị luôn
+            if (isReviewMode && isSubmitted) {
+                showAnswer();
+            }
+            
+            // Cập nhật nút
+            prevBtn.disabled = (currentIndex === 0);
+            nextBtn.disabled = (currentIndex === fillBlankData.length - 1);
+            
+            statsDisplay.textContent = `Câu ${currentIndex + 1}/${fillBlankData.length}`;
+        }
+
+        // Kiểm tra đáp án hiện tại
+        function checkCurrentAnswer() {
+            const q = fillBlankData[currentIndex];
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = q.answer.toLowerCase();
+            
+            // Lưu đáp án
+            userAnswers[currentIndex] = answerInput.value;
+            
+            // So sánh (loại bỏ khoảng trắng thừa)
+            const isCorrect = userAnswer.replace(/\s+/g, ' ') === correctAnswer.replace(/\s+/g, ' ') || 
+                              userAnswer.includes(correctAnswer) || 
+                              correctAnswer.includes(userAnswer);
+            
+            // Hiển thị feedback
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `✅ Đúng! Đáp án: ${q.answer}`;
+                answerInput.classList.add('correct-answer');
+                answerInput.classList.remove('wrong-answer');
+            } else {
+                feedback.className = 'feedback wrong';
+                feedback.innerHTML = `❌ Sai! Đáp án đúng là: ${q.answer}`;
+                answerInput.classList.add('wrong-answer');
+                answerInput.classList.remove('correct-answer');
+            }
+            
+            checkedQuestions[currentIndex] = true;
+        }
+
+        // Hiển thị đáp án (chế độ xem)
+        function showAnswer() {
+            const q = fillBlankData[currentIndex];
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = `🔍 Đáp án: ${q.answer}`;
+            answerInput.classList.add('correct-answer');
+            feedback.style.display = 'block';
+        }
+
+        // Cập nhật thống kê
+        function updateStats() {
+            let correct = 0;
+            for (let i = 0; i < fillBlankData.length; i++) {
+                if (!checkedQuestions[i]) continue;
+                
+                const userAnswer = userAnswers[i].trim().toLowerCase();
+                const correctAnswer = fillBlankData[i].answer.toLowerCase();
+                
+                if (userAnswer.replace(/\s+/g, ' ') === correctAnswer.replace(/\s+/g, ' ') || 
+                    userAnswer.includes(correctAnswer) || 
+                    correctAnswer.includes(userAnswer)) {
+                    correct++;
+                }
+            }
+            
+            const total = fillBlankData.length;
+            const wrong = total - correct;
+            const percent = (correct / total * 100).toFixed(1);
+            
+            correctCount.textContent = correct;
+            wrongCount.textContent = wrong;
+            scorePercent.textContent = percent + '%';
+        }
+
+        // Sự kiện
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                // Lưu đáp án hiện tại
+                userAnswers[currentIndex] = answerInput.value;
+                currentIndex--;
+                renderQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < fillBlankData.length - 1) {
+                // Lưu đáp án hiện tại
+                userAnswers[currentIndex] = answerInput.value;
+                currentIndex++;
+                renderQuestion();
+            }
+        });
+
+        answerInput.addEventListener('input', () => {
+            // Xóa feedback khi người dùng nhập lại
+            if (!isReviewMode) {
+                feedback.className = 'feedback';
+                feedback.style.display = 'none';
+                answerInput.classList.remove('correct-answer', 'wrong-answer');
+                checkedQuestions[currentIndex] = false;
+            }
+        });
+
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (isReviewMode && isSubmitted) {
+                    // Ở chế độ xem, không làm gì
+                } else {
+                    checkCurrentAnswer();
+                }
+            }
+        });
+
+        // Nút kiểm tra
+        checkBtn.addEventListener('click', () => {
+            checkCurrentAnswer();
+        });
+
+        // Nút nộp bài
+        submitBtn.addEventListener('click', () => {
+            // Lưu đáp án cuối cùng
+            userAnswers[currentIndex] = answerInput.value;
+            
+            // Kiểm tra tất cả các câu chưa được kiểm tra
+            for (let i = 0; i < fillBlankData.length; i++) {
+                if (!checkedQuestions[i] && userAnswers[i]) {
+                    // Tạm thời đánh dấu đã kiểm tra
+                    checkedQuestions[i] = true;
+                }
+            }
+            
+            updateStats();
+            resultArea.classList.add('show');
+            
+            isSubmitted = true;
+            checkBtn.style.display = 'block';
+        });
+
+        // Chuyển chế độ làm bài
+        modeTest.addEventListener('click', () => {
+            isReviewMode = false;
+            modeTest.classList.add('active');
+            modeReview.classList.remove('active');
+            legend.style.display = 'none';
+            checkBtn.style.display = 'block';
+            renderQuestion();
+        });
+
+        // Chuyển chế độ xem đáp án
+        modeReview.addEventListener('click', () => {
+            if (isSubmitted) {
+                isReviewMode = true;
+                modeReview.classList.add('active');
+                modeTest.classList.remove('active');
+                legend.style.display = 'flex';
+                checkBtn.style.display = 'none';
+                showAnswer();
+            } else {
+                alert('Bạn cần nộp bài trước khi xem đáp án!');
+            }
+        });
+
+        // Khởi tạo lần đầu
+        renderQuestion();
+    </script>
+</body>
+</html>
